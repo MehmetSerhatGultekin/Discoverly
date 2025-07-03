@@ -23,8 +23,11 @@ class HomeView: UIView {
     public let categoryCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout() // Bu, koleksiyon görünümünün hücreleri nasıl yerleştireceğini belirleyen bir düzenleyicidir. Yani: Hücreler satır satır mı dizilsin, yoksa tek satırda yatay mı olsun?
         layout.scrollDirection = .horizontal // Varsayılan olarak CollectionView dikey kayar. Ama burada kategori seçimi gibi yatay bir görünüm istediğimiz için .horizontal olarak ayarlanır.
+        layout.itemSize = UICollectionViewFlowLayout.automaticSize
+        layout.estimatedItemSize = .init(width: 70, height: 40)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout) // frame: .zero demek: “Ben boyutunu constraint’lerle ayarlayacağım”.
         collectionView.backgroundColor = .white
+        collectionView.contentInset = .init(top: 0, left: 16, bottom: 0, right: 16)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
@@ -42,7 +45,6 @@ class HomeView: UIView {
         tableView.sectionHeaderHeight = 0
         tableView.sectionFooterHeight = 0
         tableView.separatorInset = .zero
-        tableView.contentInset = .zero
         return tableView
     }()
     

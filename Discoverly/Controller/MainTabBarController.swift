@@ -7,6 +7,7 @@
 import UIKit
 
 class MainTabBarController: UITabBarController {
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Tab bar ayarları buraya gelecek
@@ -37,7 +38,7 @@ class MainTabBarController: UITabBarController {
         viewControllers = [nav1, nav2, nav3]
     }
     
-    func createNav(
+    private func createNav(
         with title: String, // Bu, Swift’te kullanılan external parameter name örneğidir.with burada fonksiyonu çağıran kişi için okunabilirliği artırır.
         and image: UIImage?,
         viewController: UIViewController

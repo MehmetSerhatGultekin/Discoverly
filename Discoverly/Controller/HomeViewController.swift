@@ -7,26 +7,23 @@
 
 import UIKit
 
-struct MovieResponse: Decodable {
-    let results: [Content]
-}
+/*
+ TODO:
+ - Pagination yapisi kurulmali
+ - TableviewCell'in configure methodu olusturulmali
+ - Favorites
+ */
 
 class HomeViewController: UIViewController {
     
-    var selectedCategory: String = "All"
+    enum Constants {
+        static let categoryCellIdentifier = "CategoryCell"
+    }
     
-    let categories: [String] = [
-        "All",
-        "Drama",
-        "Comedy",
-        "Action",
-        "Thriller",
-        "Sci-Fi",
-        "Horror"
-    ]
-    
-    var allContents: [Content] = []
-    var filteredContents: [Content] = []
+    private var selectedCategory: String = "All"
+    private var categories: [String] = []
+    private var allContents: [Content] = []
+    private var filteredContents: [Content] = []
    
     override func loadView() {
         view = HomeView()
@@ -38,7 +35,7 @@ class HomeViewController: UIViewController {
         guard let homeView = view as? HomeView else { return }
         homeView.categoryCollectionView.delegate = self
         homeView.categoryCollectionView.dataSource = self
-        homeView.categoryCollectionView.register(Categorycell.self, forCellWithReuseIdentifier: "CategoryCell") // kategori cell entegrasyonu
+        homeView.categoryCollectionView.register(Categorycell.self, forCellWithReuseIdentifier: Constants.categoryCellIdentifier) // kategori cell entegrasyonu
         
         homeView.contentTableView.register(ContentCell.self, forCellReuseIdentifier: "ContentCell")
         homeView.contentTableView.delegate = self
@@ -47,7 +44,7 @@ class HomeViewController: UIViewController {
         fetchData()
     }
     
-    func fetchData() {
+    private func fetchData() {
         let apiKey = "a207ceabe80f15aacffcc7510a50dcdc"
 
         let group = DispatchGroup() // Birden fazla sayfayı çekmek için bu yapı kullanılıyor.DispatchGroup, tüm işlemler bitene kadar beklememizi sağlar.
@@ -62,7 +59,9 @@ class HomeViewController: UIViewController {
             }
 
             URLSession.shared.dataTask(with: url) { data, response, error in
-                defer { group.leave() }
+                defer {
+                    group.leave()
+                }
 
                 if let error = error {
                     print("Hata: \(error.localizedDescription)")
@@ -87,9 +86,13 @@ class HomeViewController: UIViewController {
         group.notify(queue: .main) {
             self.allContents = combinedResults
             self.filteredContents = combinedResults
+            
+            self.categories = ["All"] + combinedResults.map { $0.category }.unique()
+            
 
             if let homeView = self.view as? HomeView {
                 homeView.contentTableView.reloadData()
+                homeView.categoryCollectionView.reloadData()
             }
 
             print("Tüm sayfalardan gelen toplam içerik: \(combinedResults.count)")
@@ -102,46 +105,18 @@ class HomeViewController: UIViewController {
 
 extension HomeViewController:
     UICollectionViewDelegate,
-    UICollectionViewDataSource,
-    UICollectionViewDelegateFlowLayout
+    UICollectionViewDataSource
 {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return categories.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCell", for: indexPath) as! Categorycell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.categoryCellIdentifier, for: indexPath) as! Categorycell
         let category = categories[indexPath.item]
-        cell.categoryLabel.text = category
+        cell.configure(category: category, isSelected: category == selectedCategory)
         
-        // Vurgulama burada yapılır
-        let isSelected = (category == selectedCategory)
-        cell.configureAppearance(isSelected: isSelected)
-        if isSelected {
-            cell.backgroundColor = .black
-            cell.categoryLabel.textColor = .white
-        } else {
-            cell.backgroundColor = UIColor.systemGray6
-            cell.categoryLabel.textColor = .black
-        }
-        cell.layer.cornerRadius = 8
-        cell.layer.masksToBounds = true
-        // Fade-in animation for collection cell with transform effect
-        cell.alpha = 0
-        cell.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
-        UIView.animate(withDuration: 0.3) {
-            cell.alpha = 1
-            cell.transform = .identity
-        }
         return cell
-    }
-    
-    func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        sizeForItemAt indexPath: IndexPath
-    ) -> CGSize {
-        return CGSize(width: 100, height: 40) // itemlerin size'laarı ayarlandı
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

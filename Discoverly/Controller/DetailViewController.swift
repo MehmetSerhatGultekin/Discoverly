@@ -38,6 +38,18 @@ class DetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        setupViews()
+        setupConstraints()
+        configure()
+        
+        view.alpha = 0
+        UIView.animate(withDuration: 0.4) {
+            self.view.alpha = 1
+        }
+    }
+    
+    private func setupViews() {
         view.backgroundColor = UIColor(red: 240/255, green: 248/255, blue: 255/255, alpha: 1) // AliceBlue
         
         // Enable large titles for navigation bar
@@ -47,14 +59,6 @@ class DetailViewController: UIViewController {
         view.addSubview(posterImageView)
         view.addSubview(ratingLabel)
         view.addSubview(overviewLabel)
-        
-        setupConstraints()
-        configure()
-        
-        view.alpha = 0
-        UIView.animate(withDuration: 0.4) {
-            self.view.alpha = 1
-        }
     }
     
     private func setupConstraints() {

@@ -34,6 +34,7 @@ class ContentCell: UITableViewCell {
             categoryLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             categoryLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             categoryLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            categoryLabel.heightAnchor.constraint(equalToConstant: 15),
 
             titleLabel.topAnchor.constraint(equalTo: categoryLabel.bottomAnchor, constant: 4),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
