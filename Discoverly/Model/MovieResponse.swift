@@ -9,4 +9,10 @@ import Foundation
 
 struct MovieResponse: Decodable {
     let results: [Content]
+    let totalPages: Int
+
+    enum CodingKeys: String, CodingKey {
+        case results
+        case totalPages = "total_pages"
+    }
 }

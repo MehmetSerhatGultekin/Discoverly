@@ -48,15 +48,41 @@ class HomeView: UIView {
         return tableView
     }()
     
+    public let spinner: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView(style: .medium)
+        spinner.hidesWhenStopped = true
+        return spinner
+    }()
+    
+    // MARK: Inits
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+        configureViews()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension HomeView {
+    func configureViews() {
         backgroundColor = .white
         
+        addSubviews()
+        setupConstraints()
+        contentTableView.tableFooterView = spinner // Daha sonra bakılacak 
+    }
+    
+    func addSubviews() {
         addSubview(titleLabel)
         addSubview(categoryCollectionView)
         addSubview(contentTableView)
-
+    }
+    
+    func setupConstraints() {
         NSLayoutConstraint.activate([
             // titleLabel constraints
             titleLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
@@ -74,10 +100,5 @@ class HomeView: UIView {
             contentTableView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
             contentTableView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
         ])
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        fatalError("init(coder:) has not been implemented")
     }
 }

@@ -20,13 +20,29 @@ class Categorycell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        layout()
+        configureViews()
     }
     
-    private func layout() {
-        contentView.addSubview(categoryLabel)
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension Categorycell {
+    private func configureViews() {
+        addSubviews()
+        setupConstraints()
+        configureAppearance(isSelected: false)
+        configure(category: "", isSelected: false)
+        layoutSubviews()
         
+    }
+    
+    private func addSubviews() {
+        contentView.addSubview(categoryLabel)
+    }
+    
+    private func setupConstraints() {
         let heightConstraint = categoryLabel.heightAnchor.constraint(equalToConstant: 40)
         heightConstraint.priority = .defaultLow
         let widthConstraint = categoryLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 70)
@@ -42,18 +58,14 @@ class Categorycell: UICollectionViewCell {
         ])
     }
     
-    required init(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func configureAppearance(isSelected: Bool) {
+    private func configureAppearance(isSelected: Bool) {
         backgroundColor = isSelected ? .black : .systemGray6
         categoryLabel.textColor = isSelected ? .white : .black
         layer.borderWidth = isSelected ? 0 : 1
         layer.borderColor = UIColor.systemGray4.cgColor
     }
     
-    func configure(category: String, isSelected: Bool) {
+    public func configure(category: String, isSelected: Bool) {
         categoryLabel.text = category
         
         configureAppearance(isSelected: isSelected)
@@ -80,6 +92,7 @@ class Categorycell: UICollectionViewCell {
         layer.cornerRadius = 8
         layer.masksToBounds = true
     }
+    
 }
 
 /*

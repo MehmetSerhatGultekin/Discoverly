@@ -10,7 +10,9 @@ import UIKit
 class DetailViewController: UIViewController {
     
     var content: Content?
-
+    
+     // MARK: Properties
+    
     private let posterImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -35,30 +37,32 @@ class DetailViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-
+    
+    // MARK: Lifecycles
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupViews()
-        setupConstraints()
-        configure()
-        
-        view.alpha = 0
-        UIView.animate(withDuration: 0.4) {
-            self.view.alpha = 1
-        }
     }
-    
+}
+
+extension DetailViewController {
     private func setupViews() {
         view.backgroundColor = UIColor(red: 240/255, green: 248/255, blue: 255/255, alpha: 1) // AliceBlue
         
         // Enable large titles for navigation bar
         // navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .never
+        view.alpha = 0
+        UIView.animate(withDuration: 0.4) {
+            self.view.alpha = 1
+        }
+
         
-        view.addSubview(posterImageView)
-        view.addSubview(ratingLabel)
-        view.addSubview(overviewLabel)
+        addSubViews()
+        setupConstraints()
+        configure()
     }
     
     private func setupConstraints() {
@@ -76,10 +80,15 @@ class DetailViewController: UIViewController {
             overviewLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
         ])
     }
+    private func addSubViews() {
+        view.addSubview(posterImageView)
+        view.addSubview(ratingLabel)
+        view.addSubview(overviewLabel)
+    }
     
     private func configure() {
         guard let content = content else { return }
-        // Set navigationItem.title as usual; large titles will allow for more space
+        //Set navigationItem.title as usual; large titles will allow for more space
         self.navigationItem.title = content.title
         ratingLabel.text = "IMDB: \(String(format: "%.1f", content.voteAverage))"
         overviewLabel.text = content.overview
@@ -99,4 +108,5 @@ class DetailViewController: UIViewController {
             }
         }
     }
+
 }

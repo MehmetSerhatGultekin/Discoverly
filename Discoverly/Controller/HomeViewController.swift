@@ -16,10 +16,7 @@ import UIKit
 
 class HomeViewController: UIViewController {
     
-    enum Constants {
-        static let categoryCellIdentifier = "CategoryCell"
-    }
-    
+
     private var selectedCategory: String = "All"
     private var categories: [String] = []
     private var allContents: [Content] = []
@@ -35,24 +32,24 @@ class HomeViewController: UIViewController {
         guard let homeView = view as? HomeView else { return }
         homeView.categoryCollectionView.delegate = self
         homeView.categoryCollectionView.dataSource = self
-        homeView.categoryCollectionView.register(Categorycell.self, forCellWithReuseIdentifier: Constants.categoryCellIdentifier) // kategori cell entegrasyonu
+        homeView.categoryCollectionView.register(Categorycell.self, forCellWithReuseIdentifier: Constants.Identifiers.categoryCellIdentifier) // kategori cell entegrasyonu
         
-        homeView.contentTableView.register(ContentCell.self, forCellReuseIdentifier: "ContentCell")
+        homeView.contentTableView.register(ContentCell.self, forCellReuseIdentifier: Constants.Identifiers.contentCellIdentifier)
         homeView.contentTableView.delegate = self
         homeView.contentTableView.dataSource = self
         
         fetchData()
     }
     
+    // MARK: Fetching
+    
     private func fetchData() {
-        let apiKey = "a207ceabe80f15aacffcc7510a50dcdc"
-
         let group = DispatchGroup() // Birden fazla sayfayı çekmek için bu yapı kullanılıyor.DispatchGroup, tüm işlemler bitene kadar beklememizi sağlar.
         var combinedResults: [Content] = []
 
         for page in 1...15 {
             group.enter()
-            let urlString = "https://api.themoviedb.org/3/movie/popular?api_key=\(apiKey)&language=en-US&page=\(page)"
+            let urlString = "https://api.themoviedb.org/3/movie/popular?api_key=\(Constants.apiKey)&language=en-US&page=\(page)"
             guard let url = URL(string: urlString) else {
                 group.leave()
                 continue
@@ -112,10 +109,11 @@ extension HomeViewController:
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.categoryCellIdentifier, for: indexPath) as! Categorycell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.Identifiers.categoryCellIdentifier, for: indexPath) as? Categorycell else {
+            return UICollectionViewCell()
+        }
         let category = categories[indexPath.item]
         cell.configure(category: category, isSelected: category == selectedCategory)
-        
         return cell
     }
     
@@ -145,7 +143,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ContentCell", for: indexPath) as? ContentCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Identifiers.contentCellIdentifier, for: indexPath) as? ContentCell else {
             return UITableViewCell()
         }
         
