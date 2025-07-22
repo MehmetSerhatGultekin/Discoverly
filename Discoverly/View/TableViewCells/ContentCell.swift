@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ContentCell: UITableViewCell {
+final class ContentCell: UITableViewCell {
 
     // MARK: Properties
     
@@ -51,7 +51,7 @@ extension ContentCell {
         contentView.layer.masksToBounds = true
         
         addSubviews()
-        configureConstraints()
+        setupConstraints()
         setSelected(true, animated: true)
     }
     
@@ -60,7 +60,7 @@ extension ContentCell {
         contentView.addSubview(categoryLabel)
     }
     
-    private func configureConstraints() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             categoryLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             categoryLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),

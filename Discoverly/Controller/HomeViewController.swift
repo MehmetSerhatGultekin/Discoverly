@@ -14,9 +14,11 @@ import UIKit
  - Favorites
  */
 
-class HomeViewController: UIViewController {
+final class HomeViewController: UIViewController {
     
 
+    //MARK: Variables
+    
     private var selectedCategory: String = "All"
     private var categories: [String] = []
     private var allContents: [Content] = []
@@ -49,7 +51,7 @@ class HomeViewController: UIViewController {
 
         for page in 1...15 {
             group.enter()
-            let urlString = "https://api.themoviedb.org/3/movie/popular?api_key=\(Constants.apiKey)&language=en-US&page=\(page)"
+            let urlString = "https://api.themoviedb.org/3/movie/popular?api_key=\(Constants.Keys.apiKey)&language=en-US&page=\(page)"
             guard let url = URL(string: urlString) else {
                 group.leave()
                 continue

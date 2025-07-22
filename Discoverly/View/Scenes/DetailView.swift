@@ -6,7 +6,7 @@
 //
 import UIKit
 
-class DetailView: UIView {
+final class DetailView: UIView {
    
     var content: Content?
     
@@ -18,6 +18,14 @@ class DetailView: UIView {
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         return imageView
+    }()
+    
+     let heartButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "heart"), for: .normal)
+        button.tintColor = .systemRed
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
     
     private let ratingLabel: UILabel = {
@@ -66,6 +74,11 @@ extension DetailView {
             posterImageView.widthAnchor.constraint(equalToConstant: 200),
             posterImageView.heightAnchor.constraint(equalToConstant: 300),
             
+            heartButton.topAnchor.constraint(equalTo: posterImageView.topAnchor, constant: 8),
+            heartButton.trailingAnchor.constraint(equalTo: posterImageView.trailingAnchor, constant: -8),
+            heartButton.widthAnchor.constraint(equalToConstant: 30),
+            heartButton.heightAnchor.constraint(equalToConstant: 30),
+            
             ratingLabel.topAnchor.constraint(equalTo: posterImageView.bottomAnchor, constant: 20),
             ratingLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             
@@ -76,6 +89,7 @@ extension DetailView {
     }
     private func addSubViews() {
         addSubview(posterImageView)
+        addSubview(heartButton)
         addSubview(ratingLabel)
         addSubview(overviewLabel)
         

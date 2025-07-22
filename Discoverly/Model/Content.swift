@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Content: Decodable {
+struct Content: Codable, Equatable { // Equatable  == karşılaştırması yapılabilmesini sağlar (silme kontrolü vs.)
     let title: String
     let overview: String
     let posterPath: String?

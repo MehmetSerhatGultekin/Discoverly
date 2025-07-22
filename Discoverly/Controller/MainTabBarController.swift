@@ -6,7 +6,7 @@
 //
 import UIKit
 
-class MainTabBarController: UITabBarController {
+final class MainTabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,8 +19,7 @@ class MainTabBarController: UITabBarController {
             viewController: homeVc
         )
 
-        let favoritesVc = UIViewController()
-        favoritesVc.view.backgroundColor = .white
+        let favoritesVc = FavoritesViewController()
         let nav2 = createNav(
             with: "Favorites",
             and: UIImage(systemName: "star"),
